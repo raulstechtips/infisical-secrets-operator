@@ -1,0 +1,14 @@
+connection:
+  enabled: true
+  name: fake-connection
+  address: https://infisical.example.test/api
+auth:
+  enabled: true
+  name: fake-auth
+  credentialsRef:
+    name: fake-credentials
+    namespace: fake-infisical
+    clientIdKey: fake-client-id
+    clientSecretKey: fake-client-secret
+secrets-operator:
+  hostAPI: https://infisical.example.test/api

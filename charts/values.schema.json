@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["connection", "auth", "secrets-operator"],
+  "properties": {
+    "global": {"type": "object"},
+    "connection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "name", "address"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "name": {"type": "string", "minLength": 1},
+        "address": {"type": "string"}
+      }
+    },
+    "auth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "name", "credentialsRef"],
+      "properties": {
+        "enabled": {"type": "boolean"},
+        "name": {"type": "string", "minLength": 1},
+        "credentialsRef": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "namespace", "clientIdKey", "clientSecretKey"],
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "namespace": {"type": "string", "minLength": 1},
+            "clientIdKey": {"type": "string", "minLength": 1},
+            "clientSecretKey": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "secrets-operator": {"type": "object"}
+  }
+}

@@ -1,0 +1,53 @@
+suite: Pinned upstream operator wiring
+templates:
+  - charts/secrets-operator/templates/deployment.yaml
+  - charts/secrets-operator/templates/infisicalauth-crd.yaml
+  - charts/secrets-operator/templates/infisicalconnection-crd.yaml
+release:
+  name: infisical-secrets-operator
+  namespace: default
+tests:
+  - it: keeps live deployment identity image replicas and arguments
+    template: charts/secrets-operator/templates/deployment.yaml
+    asserts:
+      - equal:
+          path: metadata.name
+          value: infisical-secre-controller-manager
+      - equal:
+          path: spec.replicas
+          value: 1
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: infisical/kubernetes-operator:v0.11.11
+      - equal:
+          path: spec.template.spec.containers[0].args
+          value:
+            - --metrics-bind-address=:8443
+            - --leader-elect
+            - --health-probe-bind-address=:8081
+  - it: passes the environment API address to the manager
+    template: charts/secrets-operator/templates/deployment.yaml
+    values:
+      - ../ci/all-on-values.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.containers[0].env
+          content:
+            name: INFISICAL_HOST_API
+            value: https://infisical.example.test/api
+  - it: retains the tracked authentication CRD
+    template: charts/secrets-operator/templates/infisicalauth-crd.yaml
+    asserts:
+      - isKind:
+          of: CustomResourceDefinition
+      - equal:
+          path: metadata.name
+          value: infisicalauths.secrets.infisical.com
+  - it: retains the tracked connection CRD
+    template: charts/secrets-operator/templates/infisicalconnection-crd.yaml
+    asserts:
+      - isKind:
+          of: CustomResourceDefinition
+      - equal:
+          path: metadata.name
+          value: infisicalconnections.secrets.infisical.com

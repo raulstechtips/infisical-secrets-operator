@@ -1,0 +1,11 @@
+{{- if .Values.connection.enabled }}
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalConnection
+metadata:
+  name: {{ .Values.connection.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "infisical-secrets-operator-wrapper.labels" . | nindent 4 }}
+spec:
+  address: {{ required "connection.address is required when connection.enabled is enabled" .Values.connection.address | quote }}
+{{- end }}

@@ -1,0 +1,40 @@
+suite: Shared universal authentication
+templates:
+  - templates/auth.yaml
+release:
+  name: infisical-secrets-operator
+  namespace: default
+tests:
+  - it: is disabled by default
+    asserts:
+      - hasDocuments:
+          count: 0
+  - it: references the configured connection and credentials without secret values
+    values:
+      - ../ci/all-on-values.yaml
+    asserts:
+      - isKind:
+          of: InfisicalAuth
+      - equal:
+          path: metadata.name
+          value: fake-auth
+      - equal:
+          path: spec.method
+          value: universal
+      - equal:
+          path: spec.infisicalConnectionRef
+          value:
+            name: fake-connection
+            namespace: default
+      - equal:
+          path: spec.universal.clientIdRef
+          value:
+            name: fake-credentials
+            namespace: fake-infisical
+            key: fake-client-id
+      - equal:
+          path: spec.universal.clientSecretRef
+          value:
+            name: fake-credentials
+            namespace: fake-infisical
+            key: fake-client-secret
