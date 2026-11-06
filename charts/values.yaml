@@ -1,0 +1,18 @@
+# Environment addresses are supplied by cluster-config. No secret values here.
+connection:
+  enabled: false
+  name: infisical-prod
+  address: ""
+
+auth:
+  enabled: false
+  name: infisical-prod-universal-auth
+  # This pre-existing Secret is not managed by this chart.
+  credentialsRef:
+    name: universal-auth-credentials
+    namespace: infisical
+    clientIdKey: clientId
+    clientSecretKey: clientSecret
+
+# Upstream v0.11.11 defaults match live. hostAPI is supplied in apps/dev.
+secrets-operator: {}

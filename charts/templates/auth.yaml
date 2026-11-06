@@ -1,0 +1,23 @@
+{{- if .Values.auth.enabled }}
+apiVersion: secrets.infisical.com/v1beta1
+kind: InfisicalAuth
+metadata:
+  name: {{ .Values.auth.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "infisical-secrets-operator-wrapper.labels" . | nindent 4 }}
+spec:
+  method: universal
+  infisicalConnectionRef:
+    name: {{ .Values.connection.name | quote }}
+    namespace: {{ .Release.Namespace }}
+  universal:
+    clientIdRef:
+      name: {{ .Values.auth.credentialsRef.name | quote }}
+      namespace: {{ .Values.auth.credentialsRef.namespace | quote }}
+      key: {{ .Values.auth.credentialsRef.clientIdKey | quote }}
+    clientSecretRef:
+      name: {{ .Values.auth.credentialsRef.name | quote }}
+      namespace: {{ .Values.auth.credentialsRef.namespace | quote }}
+      key: {{ .Values.auth.credentialsRef.clientSecretKey | quote }}
+{{- end }}

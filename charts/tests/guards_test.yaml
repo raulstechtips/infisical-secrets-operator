@@ -1,0 +1,34 @@
+suite: Render guards and strict wrapper schema
+templates:
+  - templates/connection.yaml
+tests:
+  - it: requires an address for an enabled connection
+    set:
+      connection.enabled: true
+    asserts:
+      - failedTemplate:
+          errorMessage: connection.address is required when connection.enabled is enabled
+  - it: rejects an unknown wrapper key
+    set:
+      connection.unknown: true
+    asserts:
+      - failedTemplate:
+          errorMessage: |
+            values don't meet the specifications of the schema(s) in the following chart(s):
+            infisical-secrets-operator:
+            - connection: Additional property unknown is not allowed
+  - it: rejects a quoted boolean
+    set:
+      connection.enabled: "true"
+    asserts:
+      - failedTemplate:
+          errorMessage: |
+            values don't meet the specifications of the schema(s) in the following chart(s):
+            infisical-secrets-operator:
+            - connection.enabled: Invalid type. Expected: boolean, given: string
+  - it: permits upstream values without copying their schema
+    set:
+      secrets-operator.anyUpstreamKey: fake-value
+    asserts:
+      - hasDocuments:
+          count: 0
