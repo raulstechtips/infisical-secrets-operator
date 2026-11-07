@@ -2,7 +2,7 @@ apiVersion: v2
 name: infisical-secrets-operator
 description: "Infisical secrets operator with the shared connection and universal authentication."
 type: application
-version: 1.0.0
+version: 0.0.0
 appVersion: "v0.11.11"
 dependencies:
   - name: secrets-operator
