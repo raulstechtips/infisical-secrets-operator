@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add a ClusterRole that aggregates to `admin`, so namespace admins such as `jenkins-deployer` can manage namespaced Infisical resources ([DEVSECOPS-196](https://raulstechtips.atlassian.net/browse/DEVSECOPS-196)).
+
 ### Changed
 
 ### Fixed
