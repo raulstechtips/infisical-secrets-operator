@@ -1,0 +1,26 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Release.Name }}-aggregate-to-admin
+  labels:
+    {{- include "infisical-secrets-operator-wrapper.labels" . | nindent 4 }}
+    rbac.authorization.k8s.io/aggregate-to-admin: "true"
+rules:
+  - apiGroups:
+      - secrets.infisical.com
+    resources:
+      - infisicalauths
+      - infisicalconnections
+      - infisicaldynamicsecrets
+      - infisicalpushsecrets
+      - infisicalsecrets
+      - infisicalstaticsecrets
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+      - deletecollection
