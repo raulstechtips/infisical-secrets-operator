@@ -38,6 +38,17 @@ No cluster changes are part of this local build.
 | `auth.credentialsRef.clientSecretKey` | `clientSecret` | Client secret key name only. |
 | `secrets-operator` | `{}` | Values passed to upstream without template changes. |
 
+## Namespace admin rights
+
+The chart always creates the ClusterRole
+`<release>-aggregate-to-admin` with the label
+`rbac.authorization.k8s.io/aggregate-to-admin: "true"`. Kubernetes adds
+its rules to the built-in `admin` ClusterRole. Every RoleBinding to `admin`
+then gets full rights on the namespaced `secrets.infisical.com` resources
+in its own namespace. For example, the Jenkins `deployNamespaces` bindings
+let `jenkins-deployer` patch the shared connection in `default`. The
+cluster-scoped `clustergenerators` resource is not included.
+
 The connection and auth use the release namespace. Auth can also reference
 an existing connection when `connection.enabled` is false. Keep
 `secrets-operator.hostAPI` and `connection.address` equal in the environment
